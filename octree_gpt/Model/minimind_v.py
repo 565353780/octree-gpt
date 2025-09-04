@@ -1,12 +1,13 @@
-import os
 import torch
 import warnings
 from torch import nn
-from typing import List
-from typing import Optional, Tuple, List
-from transformers import CLIPProcessor, CLIPModel
+from typing import Optional, Union, Tuple, List
 
-from octree_gpt.Model.minimind import *
+from octree_gpt.Model.minimind import (
+    MiniMindConfig,
+    MOEFeedForward,
+    MiniMindForCausalLM,
+)
 
 warnings.filterwarnings("ignore")
 
@@ -46,37 +47,12 @@ class MiniMindVLM(MiniMindForCausalLM):
     def __init__(
         self,
         params: VLMConfig = None,
-        vision_model_path="./model/vision_model/clip-vit-base-patch16",
     ):
         super().__init__(params)
         if not params:
             params = VLMConfig()
         self.params = params
-        self.vision_encoder, self.processor = self.__class__.get_vision_model(
-            vision_model_path
-        )
         self.vision_proj = VisionProj(hidden_size=params.hidden_size)
-
-    @staticmethod
-    def get_vision_model(model_path: str):
-        from transformers import logging as hf_logging
-
-        hf_logging.set_verbosity_error()
-        if not os.path.exists(model_path):
-            return None, None
-        model = CLIPModel.from_pretrained(model_path)
-        processor = CLIPProcessor.from_pretrained(model_path)
-        # 冻结 vision_encoder 的所有参数
-        for param in model.parameters():
-            param.requires_grad = False
-        return model.eval(), processor
-
-    @staticmethod
-    def image2tensor(image, processor):
-        if image.mode in ["RGBA", "LA"]:
-            image = image.convert("RGB")
-        inputs = processor(images=image, return_tensors="pt")["pixel_values"]
-        return inputs
 
     @staticmethod
     def get_image_embeddings(image_tensors, vision_model):
