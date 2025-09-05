@@ -39,16 +39,13 @@ class HY3DGPT(torch.nn.Module):
         return result_dict
 
     def forwardData(
-        self, input_shape_code: torch.Tensor, condition: torch.Tensor, t: torch.Tensor
+        self, input_shape_code: torch.Tensor, condition: torch.Tensor
     ) -> torch.Tensor:
-        if len(t.shape) == 0:
-            t = t.unsqueeze(0)
-
         result_dict = self.forwardCondition(input_shape_code, condition)
 
-        vt = result_dict["vt"]
+        next_shape_code = result_dict["next_shape_code"]
 
-        return vt
+        return next_shape_code
 
     def forward(self, data_dict: dict) -> dict:
         input_shape_code = data_dict["input_shape_code"]

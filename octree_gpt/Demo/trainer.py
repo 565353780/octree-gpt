@@ -15,8 +15,8 @@ def demo():
     assert dataset_root_folder_path is not None
     print(dataset_root_folder_path)
 
-    batch_size = 6
-    accum_iter = 4
+    batch_size = 2
+    accum_iter = 1
     num_workers = 16
     model_file_path = "./output/hy3d_160epoch/model_last.pth"
     model_file_path = None

@@ -47,7 +47,7 @@ class Trainer(BaseTrainer):
 
         self.gt_sample_added_to_logger = False
 
-        self.loss_fn = nn.CrossEntropyLoss(ignore_index=-100)
+        self.loss_fn = nn.CrossEntropyLoss(ignore_index=257)
 
         super().__init__(
             batch_size,
@@ -167,7 +167,7 @@ class Trainer(BaseTrainer):
         pred_next_shape_code = result_dict["next_shape_code"]
 
         gt = gt_next_shape_code.view(-1)  # (seq_len, vocab_size)
-        pred = pred_next_shape_code.view(-1, 256)  # (seq_len)
+        pred = pred_next_shape_code.view(-1, 257)  # (seq_len)
         loss = self.loss_fn(pred, gt)
 
         loss_dict = {

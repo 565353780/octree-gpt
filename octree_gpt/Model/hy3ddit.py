@@ -1,5 +1,4 @@
 import math
-from dataclasses import dataclass
 from typing import List, Tuple, Optional
 
 import torch
@@ -12,7 +11,7 @@ try:
 
     scaled_dot_product_attention = sageattn
 except ImportError as e:
-    print("[WARN][edm_hy3ddit::import]")
+    print("[WARN][hy3ddit::import]")
     print(
         "\t import sageattention failed! will use torch.nn.scaled_dot_product_attention as default!"
     )
@@ -323,7 +322,7 @@ class Hunyuan3DDiT(nn.Module):
             raise ValueError(f"Got {axes_dim} but expected positional dim {pe_dim}")
         self.hidden_size = hidden_size
         self.num_heads = num_heads
-        self.embed_layer = nn.Embedding(256, self.hidden_size)
+        self.embed_layer = nn.Embedding(257, self.hidden_size)
 
         self.latent_in = nn.Linear(self.hidden_size, self.hidden_size, bias=True)
         self.cond_in = nn.Linear(context_in_dim, self.hidden_size)
@@ -351,7 +350,7 @@ class Hunyuan3DDiT(nn.Module):
             ]
         )
 
-        self.final_layer = LastLayer(self.hidden_size, 1, 256)
+        self.final_layer = LastLayer(self.hidden_size, 1, 257)
         return
 
     def forward(self, x, cond) -> Tensor:
