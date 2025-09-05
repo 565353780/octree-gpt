@@ -13,11 +13,13 @@ class ImageDataset(Dataset):
         shape_code_folder_name: str,
         image_folder_name: str,
         transform,
+        max_length: int = 8192,
         split: str = "train",
         dtype=torch.float32,
     ) -> None:
         self.dataset_root_folder_path = dataset_root_folder_path
         self.transform = transform
+        self.max_length = max_length
         self.split = split
         self.dtype = dtype
 
@@ -124,8 +126,19 @@ class ImageDataset(Dataset):
             "[ERROR][ImageDataset::__getitem__] shape_code_params is None!"
         )
 
+        expand_shape_code = shape_code
+        if expand_shape_code.shape[0] <= self.max_length:
+            expand_shape_code = np.ones([self.max_length + 1], dtype=np.int64) * -100
+            expand_shape_code[: shape_code.shape[0]] = shape_code
+
+        expand_shape_code = torch.from_numpy(expand_shape_code).to(torch.int64)
+
+        input_shape_code = expand_shape_code[: self.max_length]
+        next_shape_code = expand_shape_code[1 : self.max_length + 1]
+
         data = {
-            "shape_code": shape_code.to(torch.int64),
+            "input_shape_code": input_shape_code,
+            "next_shape_code": next_shape_code,
             "image": image.to(self.dtype),
         }
 

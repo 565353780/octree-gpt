@@ -1,0 +1,4 @@
+from octree_gpt.Test.model import test as test_model
+
+if __name__ == "__main__":
+    test_model()
