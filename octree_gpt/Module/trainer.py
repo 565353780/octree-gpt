@@ -47,9 +47,15 @@ class Trainer(BaseTrainer):
         self.depth = 8  # 16
         self.depth_single_blocks = 16  # 32
 
+        self.context_dim = 1024
+        self.n_heads = 4  # 16
+        self.d_head = 32
+        self.depth = 4  # 16
+        self.depth_single_blocks = 8  # 32
+
         self.gt_sample_added_to_logger = False
 
-        self.loss_fn = nn.CrossEntropyLoss(ignore_index=257)
+        self.loss_fn = nn.CrossEntropyLoss(ignore_index=256)
 
         super().__init__(
             batch_size,
