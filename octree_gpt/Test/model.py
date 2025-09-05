@@ -4,6 +4,12 @@ from torch.amp import autocast
 from octree_gpt.Model.hy3d_gpt import HY3DGPT
 
 
+def count_parameters(model):
+    total = sum(p.numel() for p in model.parameters())
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    return total, trainable
+
+
 def test():
     dtype = torch.float32
     device = "cuda:0"
@@ -15,6 +21,10 @@ def test():
         depth=8,
         depth_single_blocks=16,
     ).to(device, dtype=dtype)
+
+    total, trainable = count_parameters(model)
+    print(f"Total params: {total:,}")
+    print(f"Trainable params: {trainable:,}")
 
     data_dict = {
         "input_shape_code": torch.randint(

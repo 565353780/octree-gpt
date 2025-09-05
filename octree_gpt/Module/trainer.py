@@ -39,6 +39,8 @@ class Trainer(BaseTrainer):
     ) -> None:
         self.dataset_root_folder_path = dataset_root_folder_path
 
+        self.max_length = 8192
+
         self.context_dim = 1024
         self.n_heads = 8  # 16
         self.d_head = 64
@@ -96,7 +98,7 @@ class Trainer(BaseTrainer):
                 "Objaverse_82K/shape_code",
                 "Objaverse_82K/render_jpg_v2",
                 self.dino_detector.transform,
-                8192,
+                self.max_length,
                 "train",
                 self.dtype,
             ),
@@ -110,7 +112,7 @@ class Trainer(BaseTrainer):
                     "Objaverse_82K/shape_code",
                     "Objaverse_82K/render_jpg_v2",
                     self.dino_detector.transform,
-                    8192,
+                    self.max_length,
                     "eval",
                     self.dtype,
                 ),
