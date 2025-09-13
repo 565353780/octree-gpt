@@ -1,13 +1,9 @@
 cd ..
 git clone git@github.com:565353780/octree-shape.git
-git clone git@github.com:565353780/data-convert.git
 git clone git@github.com:565353780/base-trainer.git
 git clone git@github.com:565353780/dino-v2-detect.git
 
 cd octree-shape
-./dev_setup.sh
-
-cd ../data-convert
 ./dev_setup.sh
 
 cd ../base-trainer
@@ -21,4 +17,4 @@ pip install -U timm einops diffusers flow_matching thop torchcfm \
 
 pip install -U cupy-cuda12x
 
-pip install flash-attn --no-build-isolation
+pip install flash-attn==2.8.2 --no-build-isolation

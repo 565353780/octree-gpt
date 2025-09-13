@@ -127,14 +127,14 @@ class ImageDataset(Dataset):
         )
 
         expand_shape_code = shape_code
-        if expand_shape_code.shape[0] <= self.max_length:
-            expand_shape_code = np.ones([self.max_length + 1], dtype=np.int64) * 256
+        if expand_shape_code.shape[0] < self.max_length:
+            expand_shape_code = np.ones([self.max_length], dtype=np.int64) * 256
             expand_shape_code[: shape_code.shape[0]] = shape_code
 
         expand_shape_code = torch.from_numpy(expand_shape_code).to(torch.int64)
 
-        input_shape_code = expand_shape_code[: self.max_length]
-        next_shape_code = expand_shape_code[1 : self.max_length + 1]
+        input_shape_code = expand_shape_code[: self.max_length - 1]
+        next_shape_code = expand_shape_code[1 : self.max_length]
 
         data = {
             "input_shape_code": input_shape_code,

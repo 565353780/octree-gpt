@@ -58,7 +58,7 @@ def repeat_kv(x: torch.Tensor, n_rep: int) -> torch.Tensor:
 
 
 def attention(q: Tensor, k: Tensor, v: Tensor) -> Tensor:
-    x = scaled_dot_product_attention(q, k, v)
+    x = scaled_dot_product_attention(q, k, v, is_causal=True)
     x = rearrange(x, "B H L D -> B L (H D)")
     return x
 
